@@ -9242,6 +9242,9 @@ const notInCartCss = css({
   backgroundColor: "black",
   color: "white"
 });
+function safeBtoa(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
 function CartButton({
   isInCart,
   refetchCart,
@@ -9256,7 +9259,7 @@ function CartButton({
     `${URLS.CART_ITEMS}/${cartItemId}`,
     {
       headers: {
-        Authorization: `Basic ${btoa(
+        Authorization: `Basic ${safeBtoa(
           `${"youdame"}:${"password"}`
         )}`,
         "Content-Type": "application/json"
@@ -9461,7 +9464,7 @@ function App() {
     error: cartFetchError
   } = useFetch(URLS.CART_ITEMS, {
     headers: {
-      Authorization: `Basic ${btoa(
+      Authorization: `Basic ${safeBtoa(
         `${"youdame"}:${"password"}`
       )}`,
       "Content-Type": "application/json"
