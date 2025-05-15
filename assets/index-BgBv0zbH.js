@@ -9242,7 +9242,6 @@ const notInCartCss = css({
   backgroundColor: "black",
   color: "white"
 });
-var define_import_meta_env_default$1 = { BASE_URL: "/react-shopping-products/", MODE: "production", DEV: false, PROD: true, SSR: false };
 function CartButton({
   isInCart,
   refetchCart,
@@ -9258,7 +9257,7 @@ function CartButton({
     {
       headers: {
         Authorization: `Basic ${btoa(
-          `${define_import_meta_env_default$1.VITE_USER_ID}:${define_import_meta_env_default$1.VITE_PASSWORD}`
+          `${"youdame"}:${"password"}`
         )}`,
         "Content-Type": "application/json"
       },
@@ -9271,7 +9270,7 @@ function CartButton({
     {
       headers: {
         Authorization: `Basic ${btoa(
-          `${define_import_meta_env_default$1.VITE_USER_ID}:${define_import_meta_env_default$1.VITE_PASSWORD}`
+          `${"youdame"}:${"password"}`
         )}`,
         "Content-Type": "application/json"
       },
@@ -9444,7 +9443,6 @@ const bodyCss = css({
   flexDirection: "column",
   alignItems: "center"
 });
-var define_import_meta_env_default = { BASE_URL: "/react-shopping-products/", MODE: "production", DEV: false, PROD: true, SSR: false };
 function App() {
   var _a;
   const { showError } = useErrorContext();
@@ -9464,7 +9462,7 @@ function App() {
   } = useFetch(URLS.CART_ITEMS, {
     headers: {
       Authorization: `Basic ${btoa(
-        `${define_import_meta_env_default.VITE_USER_ID}:${define_import_meta_env_default.VITE_PASSWORD}`
+        `${"youdame"}:${"password"}`
       )}`,
       "Content-Type": "application/json"
     }
