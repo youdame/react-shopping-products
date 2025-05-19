@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useOutsideClick } from "../../hooks/useOutsideClick";
-import * as styles from "./Dropdown.style";
+import { useState } from 'react';
+import { useOutsideClick } from '../../hooks/useOutsideClick';
+import * as styles from './Dropdown.style';
 
 export default function Dropdown<T extends string>({
   list,
   value,
   onSelect,
-  placeholder,
+  placeholder
 }: {
   list: readonly T[];
   value: T | null;
@@ -28,12 +28,8 @@ export default function Dropdown<T extends string>({
     <div css={styles.wrapperStyle} ref={ref}>
       <button
         type="button"
-        autoFocus={value === ""}
-        css={[
-          styles.selectBoxStyle,
-          isOpen && styles.openStyle,
-          value ? styles.selectedStyle : styles.unSelectedStyle,
-        ]}
+        autoFocus={value === ''}
+        css={[styles.selectBoxStyle, isOpen && styles.openStyle, value ? styles.selectedStyle : styles.unSelectedStyle]}
         onClick={handleToggle}
       >
         {value || placeholder}
@@ -42,11 +38,7 @@ export default function Dropdown<T extends string>({
       {isOpen && (
         <ul css={styles.listStyle}>
           {list.map((item) => (
-            <li
-              key={item}
-              css={styles.itemStyle}
-              onClick={() => handleSelect(item)}
-            >
+            <li key={item} css={styles.itemStyle} onClick={() => handleSelect(item)}>
               {item}
             </li>
           ))}

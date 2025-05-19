@@ -1,5 +1,5 @@
-import CartButton from "../../CartButton/CartButton";
-import * as styles from "./ProductCard.style";
+import CartButton from '../../CartButton/CartButton';
+import * as styles from './ProductCard.style';
 interface ProductCardProps {
   title: string;
   price: number;
@@ -13,32 +13,14 @@ interface ProductCardProps {
 // onLoad라는 프로퍼티가 있는데.. 이것을 어떻게 하면..
 // 이미지가 로드될때, spinnner를 띄울수 있을지도?
 
-function ProductCard({
-  title,
-  price,
-  imageUrl,
-  isItemInCart,
-  refetchCart,
-  productId,
-  cartItemId,
-}: ProductCardProps) {
+function ProductCard({ title, price, imageUrl, isItemInCart, refetchCart, productId, cartItemId }: ProductCardProps) {
   return (
     <li css={styles.cardCss}>
-      <img
-        css={styles.imageCss}
-        src={imageUrl}
-        alt={`${title}상품`}
-        onLoad={() => console.log("로드 되었슈!")}
-      />
+      <img css={styles.imageCss} src={imageUrl} alt={`${title}상품`} onLoad={() => console.log('로드 되었슈!')} />
       <div css={styles.detailCss}>
         <h2>{title}</h2>
         <p>{`${price.toLocaleString()}원`}</p>
-        <CartButton
-          productId={productId}
-          refetchCart={refetchCart}
-          isInCart={isItemInCart}
-          cartItemId={cartItemId}
-        />
+        <CartButton productId={productId} refetchCart={refetchCart} isInCart={isItemInCart} cartItemId={cartItemId} />
       </div>
     </li>
   );

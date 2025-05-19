@@ -1,28 +1,28 @@
-import { css } from "@emotion/react";
+import { css } from '@emotion/react';
 export const buttonCss = css({
-  width: "64px",
-  height: "26px",
-  padding: "4px 8px",
-  borderRadius: "4px",
-  border: "none",
+  width: '64px',
+  height: '26px',
+  padding: '4px 8px',
+  borderRadius: '4px',
+  border: 'none',
 
-  fontWeight: "600",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "4px",
+  fontWeight: '600',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '4px',
   span: {
-    display: "inline-block",
+    display: 'inline-block'
   },
-  justifySelf: "flex-end",
+  justifySelf: 'flex-end'
 });
 
 export const inCartCss = css({
-  backgroundColor: "#EAEAEA",
-  color: "black",
+  backgroundColor: '#EAEAEA',
+  color: 'black'
 });
 
 export const notInCartCss = css({
-  backgroundColor: "black",
-  color: "white",
+  backgroundColor: 'black',
+  color: 'white'
 });

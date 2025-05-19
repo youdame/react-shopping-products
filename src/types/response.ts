@@ -1,5 +1,5 @@
-import { CartItem } from "./cartContents";
-import { Product } from "./product";
+import { CartItem } from './cartContents';
+import { Product } from './product';
 export interface CartItemResponse {
   content: CartItem[];
   pageable: Pageable;

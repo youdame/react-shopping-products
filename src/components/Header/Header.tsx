@@ -1,5 +1,5 @@
-import { useCartContext } from "../../contexts/CartContext";
-import * as styles from "./Header.style";
+import { useCartContext } from '../../contexts/CartContext';
+import * as styles from './Header.style';
 
 function Header() {
   const { cartLength } = useCartContext();

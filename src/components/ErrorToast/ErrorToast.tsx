@@ -1,13 +1,7 @@
-import { useState, useEffect } from "react";
-import * as styles from "./ErrorToast.style";
+import { useState, useEffect } from 'react';
+import * as styles from './ErrorToast.style';
 
-export default function ErrorToast({
-  error,
-  duration = 2000,
-}: {
-  error: Error;
-  duration?: number;
-}) {
+export default function ErrorToast({ error, duration = 2000 }: { error: Error; duration?: number }) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
