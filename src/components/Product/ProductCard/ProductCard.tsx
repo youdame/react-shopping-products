@@ -1,28 +1,24 @@
-import CartButton from '../../CartButton/CartButton';
-import * as styles from './ProductCard.style';
+import { AddToCartButton, RemoveFromCartButton } from '../../CartButton/CartButton';
 import Image from '../../Image/Image';
+import * as styles from './ProductCard.style';
+
 interface ProductCardProps {
   title: string;
-  price: number;
+  price: string;
   imageUrl: string;
-  refetchCart: () => Promise<void>;
-  isItemInCart: boolean;
-  productId: number;
-  cartItemId?: number;
+  isInCart: boolean;
+  onClick: () => void;
 }
 
-function ProductCard({ title, price, imageUrl, isItemInCart, refetchCart, productId, cartItemId }: ProductCardProps) {
+export default function ProductCard({ title, price, imageUrl, isInCart, onClick }: ProductCardProps) {
   return (
     <li css={styles.cardCss}>
-      <Image css={[styles.imageCss]} src={imageUrl} alt={`${title}상품`} />
-
+      <Image css={styles.imageCss} src={imageUrl} alt={`${title}상품`} />
       <div css={styles.detailCss}>
         <h2>{title}</h2>
-        <p>{`${price.toLocaleString()}원`}</p>
-        <CartButton productId={productId} refetchCart={refetchCart} isInCart={isItemInCart} cartItemId={cartItemId} />
+        <p>{price}</p>
+        {isInCart ? <RemoveFromCartButton onClick={onClick} /> : <AddToCartButton onClick={onClick} />}
       </div>
     </li>
   );
 }
-
-export default ProductCard;

@@ -1,37 +1,43 @@
+import * as styles from './ProductList.style';
+import { deleteCartItem } from '../../../api/deleteCartItem';
+import postCartItem from '../../../api/postCartItem';
+import { useErrorContext } from '../../../contexts/ErrorContext';
 import { CartItem } from '../../../types/cartContents';
 import { Product } from '../../../types/product';
 import ProductCard from '../ProductCard/ProductCard';
-import * as styles from './ProductList.style';
+import { createProductListViewModel, ProductCardViewModel } from '../../../api/model/createProductListModel';
 
 interface ProductListProps {
   products?: Product[];
   cartItems?: CartItem[];
   refetchCart: () => Promise<void>;
 }
-
 export default function ProductList({ products, cartItems, refetchCart }: ProductListProps) {
+  const { showError } = useErrorContext();
+
+  const productListViewModel = createProductListViewModel({
+    products,
+    carts: cartItems
+  });
+
+  const handleCartToggle = async (product: ProductCardViewModel) => {
+    try {
+      if (product.isInCart) {
+        await deleteCartItem(product.cartItemId!)();
+      } else {
+        await postCartItem(product.id, 1)();
+      }
+      await refetchCart();
+    } catch (err) {
+      if (err instanceof Error) showError(err);
+    }
+  };
+
   return (
     <ul css={styles.listCss}>
-      {products?.map(({ id, price, name, imageUrl }) => {
-        const matchedCartItem = cartItems?.find((cartItem) => cartItem.product.id === id);
-
-        const cartItemId = matchedCartItem?.id;
-
-        const isItemInCart = Boolean(matchedCartItem);
-
-        return (
-          <ProductCard
-            key={id}
-            productId={id}
-            cartItemId={cartItemId}
-            price={price}
-            title={name}
-            imageUrl={imageUrl}
-            refetchCart={refetchCart}
-            isItemInCart={isItemInCart}
-          />
-        );
-      })}
+      {productListViewModel.map((productCard) => (
+        <ProductCard key={productCard.id} {...productCard} onClick={() => handleCartToggle(productCard)} />
+      ))}
     </ul>
   );
 }
