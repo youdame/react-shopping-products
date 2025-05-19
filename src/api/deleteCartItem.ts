@@ -1,6 +1,6 @@
 import { URLS } from '../constants/url';
 
-export const deleteCartItem = (cartItemId: number | undefined) => async () => {
+export const deleteCartItem = async (cartItemId: number | undefined) => {
   if (cartItemId === undefined) {
     throw new Error('cartItemId가 정의되지 않았습니다.');
   }

@@ -23,9 +23,9 @@ export default function ProductList({ products, cartItems, refetchCart }: Produc
   const handleCartToggle = async (product: ProductCardViewModel) => {
     try {
       if (product.isInCart) {
-        await deleteCartItem(product.cartItemId!)();
+        await deleteCartItem(product.cartItemId!);
       } else {
-        await postCartItem(product.id, 1)();
+        await postCartItem(product.id, 1);
       }
       await refetchCart();
     } catch (err) {
