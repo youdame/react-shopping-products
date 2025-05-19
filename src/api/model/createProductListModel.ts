@@ -3,7 +3,7 @@ import { Product } from '../../types/product';
 
 interface createProductListViewModelParams {
   products?: Product[];
-  carts?: CartItem[];
+  cartItems?: CartItem[];
 }
 
 export interface ProductCardViewModel {
@@ -17,12 +17,12 @@ export interface ProductCardViewModel {
 
 export function createProductListViewModel({
   products,
-  carts
+  cartItems
 }: createProductListViewModelParams): ProductCardViewModel[] {
   if (!products) return [];
 
   return products.map((product) => {
-    const matchedCart = carts?.find((c) => c.product.id === product.id);
+    const matchedCart = cartItems?.find((item) => item.product.id === product.id);
     return {
       id: product.id,
       title: product.name,

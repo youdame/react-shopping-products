@@ -17,7 +17,7 @@ export default function ProductList({ products, cartItems, refetchCart }: Produc
 
   const productListViewModel = createProductListViewModel({
     products,
-    carts: cartItems
+    cartItems
   });
 
   const handleCartToggle = async (product: ProductCardViewModel) => {
