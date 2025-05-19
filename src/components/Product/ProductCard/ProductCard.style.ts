@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 
 export const cardCss = css({
   display: 'flex',
+  position: 'relative',
   width: '182px',
   height: '250px',
   flexDirection: 'column',
