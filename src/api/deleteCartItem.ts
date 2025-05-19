@@ -1,6 +1,9 @@
 import { URLS } from '../constants/url';
 
 export const deleteCartItem = (cartItemId: number | undefined) => async () => {
+  if (cartItemId === undefined) {
+    throw new Error('cartItemId가 정의되지 않았습니다.');
+  }
   const res = await fetch(`${URLS.CART_ITEMS}/${cartItemId}`, {
     method: 'DELETE',
     headers: {

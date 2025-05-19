@@ -13,16 +13,22 @@ export default function ProductList({ products, cartItems, refetchCart }: Produc
   return (
     <ul css={styles.listCss}>
       {products?.map(({ id, price, name, imageUrl }) => {
+        const matchedCartItem = cartItems?.find((cartItem) => cartItem.product.id === id);
+
+        const cartItemId = matchedCartItem?.id;
+
+        const isItemInCart = Boolean(matchedCartItem);
+
         return (
           <ProductCard
             key={id}
             productId={id}
-            cartItemId={cartItems?.find((cartItem) => cartItem.product.id === id)?.id}
+            cartItemId={cartItemId}
             price={price}
             title={name}
             imageUrl={imageUrl}
             refetchCart={refetchCart}
-            isItemInCart={Boolean(cartItems?.some((p) => p.product.id === id))}
+            isItemInCart={isItemInCart}
           />
         );
       })}

@@ -22,26 +22,20 @@ function App() {
   const {
     data: products,
     isLoading: productFetchLoading,
-    error: productFetchError,
-    fetcher: refetchProducts
+    error: productFetchError
   } = useFetch<ProductResponse>({
     fetchFn: getProducts(orderBy),
-    immediate: true,
     deps: [orderBy]
   });
 
   const {
     data: cartItems,
     error: cartFetchError,
+    isLoading: cartItemsLoading,
     fetcher: refetchCart
   } = useFetch<CartItemResponse>({
-    fetchFn: getCartItems,
-    immediate: true
+    fetchFn: getCartItems
   });
-
-  useEffect(() => {
-    refetchProducts();
-  }, [orderBy]);
 
   useEffect(() => {
     if (cartItems?.content) {
@@ -75,10 +69,10 @@ function App() {
       <div css={styles.dropdownDivCss}>
         <Header />
         <Dropdown list={CATEGORY_OPTIONS} placeholder="전체" value={category} onSelect={handleSelectCategory} />
-
         <Dropdown list={ORDER_BY_OPTIONS} placeholder="낮은 가격순" value={orderBy} onSelect={handleOrderBySelect} />
       </div>
-      {productFetchLoading ? (
+
+      {productFetchLoading || cartItemsLoading ? (
         <div style={{ marginBottom: '500px' }}>
           <Spinner size="medium" />
         </div>
