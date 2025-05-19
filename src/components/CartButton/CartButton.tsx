@@ -1,5 +1,5 @@
 import * as styles from './CartButton.style';
-import { ComponentProps, useEffect, useState } from 'react';
+import { ComponentProps, useEffect } from 'react';
 import useFetch from '../../hooks/useFetch';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { useCartContext } from '../../contexts/CartContext';
@@ -16,14 +16,21 @@ interface CartButtonProps extends ComponentProps<'button'> {
 export default function CartButton({ isInCart, refetchCart, productId, cartItemId, ...props }: CartButtonProps) {
   const { showError } = useErrorContext();
   const { cartLength } = useCartContext();
-  const [isFetchLoading, setIsFetchLoading] = useState(false);
 
-  const { fetcher: deleteCartItemFetcher, error: deleteError } = useFetch({
+  const {
+    fetcher: deleteCartItemFetcher,
+    isLoading: isDeletingCartItem,
+    error: deleteError
+  } = useFetch({
     fetchFn: deleteCartItem(cartItemId),
     immediate: false
   });
 
-  const { fetcher: postCartItemFetcher, error: addError } = useFetch({
+  const {
+    fetcher: postCartItemFetcher,
+    isLoading: isAddingCartItem,
+    error: addError
+  } = useFetch({
     fetchFn: postCartItem(productId, 1),
     immediate: false
   });
@@ -42,21 +49,17 @@ export default function CartButton({ isInCart, refetchCart, productId, cartItemI
 
   const handleDeleteCartItem = async () => {
     try {
-      setIsFetchLoading(true);
       await deleteCartItemFetcher();
       await refetchCart();
     } catch (error) {
       if (error instanceof Error) {
         showError(error);
       }
-    } finally {
-      setIsFetchLoading(false);
     }
   };
 
   const handlePostCartItemFetcher = async () => {
     try {
-      setIsFetchLoading(true);
       if (cartLength && cartLength >= 50) {
         throw new Error(`장바구니 갯수가 50개 이상 담을수 없습니다.`);
       }
@@ -66,14 +69,13 @@ export default function CartButton({ isInCart, refetchCart, productId, cartItemI
       if (error instanceof Error) {
         showError(error);
       }
-    } finally {
-      setIsFetchLoading(false);
     }
   };
+
   return (
     <button
       {...props}
-      disabled={isFetchLoading}
+      disabled={isAddingCartItem || isDeletingCartItem}
       onClick={isInCart ? handleDeleteCartItem : handlePostCartItemFetcher}
       css={[styles.buttonCss, isInCart ? styles.inCartCss : styles.notInCartCss]}
     >

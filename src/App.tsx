@@ -63,6 +63,9 @@ function App() {
     setOrderBy(value);
   };
 
+  const filteredProducts =
+    category === '전체' ? products?.content : products?.content.filter((item) => item.category == category);
+
   return (
     <div css={styles.bodyCss}>
       <div style={{ marginBottom: '80px' }}></div>
@@ -77,13 +80,7 @@ function App() {
           <Spinner size="medium" />
         </div>
       ) : (
-        <ProductList
-          products={
-            category === '전체' ? products?.content : products?.content.filter((item) => item.category == category)
-          }
-          cartItems={cartItems?.content}
-          refetchCart={handleRefetchCart}
-        />
+        <ProductList products={filteredProducts} cartItems={cartItems?.content} refetchCart={handleRefetchCart} />
       )}
     </div>
   );
