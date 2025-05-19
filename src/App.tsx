@@ -9,13 +9,11 @@ import ProductList from './components/Product/ProductList/ProductList';
 import { CATEGORY_OPTIONS, ORDER_BY_OPTIONS } from './constants/categoryOption';
 import * as styles from './App.style';
 import { CategoryOptionType, OrderByOptionType } from './types/categoryOption';
-import { useCartContext } from './contexts/CartContext';
 import getProducts from './api/getProducts';
 import getCartItems from './api/getCartItems';
 
 function App() {
   const { showError } = useErrorContext();
-  const { setCartLength } = useCartContext();
   const [category, setCategory] = useState<CategoryOptionType>('전체');
   const [orderBy, setOrderBy] = useState<OrderByOptionType>('낮은 가격순');
 
@@ -36,12 +34,6 @@ function App() {
   } = useFetch<CartItemResponse>({
     fetchFn: getCartItems
   });
-
-  useEffect(() => {
-    if (cartItems?.content) {
-      setCartLength(cartItems.content.length);
-    }
-  }, [cartItems?.content?.length]);
 
   useEffect(() => {
     if (productFetchError) {
@@ -70,7 +62,7 @@ function App() {
     <div css={styles.bodyCss}>
       <div style={{ marginBottom: '80px' }}></div>
       <div css={styles.dropdownDivCss}>
-        <Header />
+        {cartItemsLoading ? <Header /> : <Header cartLength={cartItems?.content.length} />}
         <Dropdown list={CATEGORY_OPTIONS} placeholder="전체" value={category} onSelect={handleSelectCategory} />
         <Dropdown list={ORDER_BY_OPTIONS} placeholder="낮은 가격순" value={orderBy} onSelect={handleOrderBySelect} />
       </div>

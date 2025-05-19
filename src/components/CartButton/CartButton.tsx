@@ -2,7 +2,6 @@ import * as styles from './CartButton.style';
 import { ComponentProps, useEffect } from 'react';
 import useFetch from '../../hooks/useFetch';
 import { useErrorContext } from '../../contexts/ErrorContext';
-import { useCartContext } from '../../contexts/CartContext';
 import { deleteCartItem } from '../../api/deleteCartItem';
 import postCartItem from '../../api/postCartItem';
 
@@ -15,7 +14,6 @@ interface CartButtonProps extends ComponentProps<'button'> {
 
 export default function CartButton({ isInCart, refetchCart, productId, cartItemId, ...props }: CartButtonProps) {
   const { showError } = useErrorContext();
-  const { cartLength } = useCartContext();
 
   const {
     fetcher: deleteCartItemFetcher,
@@ -60,9 +58,6 @@ export default function CartButton({ isInCart, refetchCart, productId, cartItemI
 
   const handlePostCartItemFetcher = async () => {
     try {
-      if (cartLength && cartLength >= 50) {
-        throw new Error(`장바구니 갯수가 50개 이상 담을수 없습니다.`);
-      }
       await postCartItemFetcher();
       await refetchCart();
     } catch (error) {
