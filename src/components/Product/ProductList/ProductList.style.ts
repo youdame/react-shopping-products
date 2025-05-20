@@ -7,3 +7,10 @@ export const listCss = css({
   margin: '0 auto',
   minHeight: '800px'
 });
+
+export const dropdownDivCss = css({
+  display: 'flex',
+  width: '385px',
+  justifyContent: 'space-between',
+  marginBottom: '24px'
+});
