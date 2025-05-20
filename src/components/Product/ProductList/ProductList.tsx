@@ -18,10 +18,9 @@ import postCartItem from '../../../api/postCartItem';
 interface ProductListProps {
   cartItems?: CartItem[];
   refetchCart: () => Promise<void>;
-  cartItemsLoading: boolean;
 }
 
-export default function ProductList({ cartItems, refetchCart, cartItemsLoading }: ProductListProps) {
+export default function ProductList({ cartItems, refetchCart }: ProductListProps) {
   const [category, setCategory] = useState<CategoryOptionType>('전체');
   const [orderBy, setOrderBy] = useState<OrderByOptionType>('낮은 가격순');
   const { showError } = useErrorContext();
@@ -68,7 +67,7 @@ export default function ProductList({ cartItems, refetchCart, cartItemsLoading }
         <Dropdown list={CATEGORY_OPTIONS} placeholder="전체" value={category} onSelect={setCategory} />
         <Dropdown list={ORDER_BY_OPTIONS} placeholder="낮은 가격순" value={orderBy} onSelect={setOrderBy} />
       </div>
-      {cartItemsLoading || productFetchLoading ? (
+      {productFetchLoading ? (
         <Spinner size="medium" />
       ) : (
         <ul css={styles.listCss}>

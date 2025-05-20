@@ -1,7 +1,7 @@
 import * as styles from './Spinner.styles';
 
 interface SpinnerProps {
-  size: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large';
 }
 
 const Spinner = ({ size = 'medium' }: SpinnerProps) => {

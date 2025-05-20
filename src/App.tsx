@@ -26,8 +26,7 @@ function App() {
     <div css={styles.bodyCss}>
       <div style={{ marginBottom: '80px' }} />
       {cartItemsLoading ? <Header /> : <Header cartLength={cartItems?.content.length} />}
-
-      <ProductList cartItemsLoading={cartItemsLoading} cartItems={cartItems?.content} refetchCart={handleRefetchCart} />
+      <ProductList cartItems={cartItems?.content} refetchCart={handleRefetchCart} />
     </div>
   );
 }
