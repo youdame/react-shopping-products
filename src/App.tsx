@@ -1,15 +1,12 @@
 import * as styles from './App.style';
-import { useEffect } from 'react';
 import useFetch from './hooks/useFetch';
 import { CartItemResponse } from './types/response';
 import getCartItems from './api/getCartItems';
-import { useErrorContext } from './contexts/ErrorContext';
 import Header from './components/Header/Header';
 import ProductList from './components/Product/ProductList/ProductList';
+import useErrorHandler from './hooks/useErrorHandler';
 
 function App() {
-  const { showError } = useErrorContext();
-
   const {
     data: cartItems,
     error: cartFetchError,
@@ -19,15 +16,7 @@ function App() {
     fetchFn: getCartItems
   });
 
-  useEffect(() => {
-    console.log('cartItems updated in App:', cartItems);
-  }, [cartItems]);
-
-  useEffect(() => {
-    if (cartFetchError) {
-      showError(cartFetchError);
-    }
-  }, [cartFetchError, showError]);
+  useErrorHandler(cartFetchError);
 
   async function handleRefetchCart() {
     await refetchCart();
