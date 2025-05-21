@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw';
 import products from './data/products.json';
 import cartItems from './data/cartItems.json';
 import { CartItemResponse } from '../types/response';
+import { URLS } from '../constants/url';
 const serverCartItems = JSON.parse(JSON.stringify(cartItems)) as CartItemResponse;
 
 type PostProductRequestBody = {
@@ -10,17 +11,26 @@ type PostProductRequestBody = {
 };
 
 export const handlers = [
-  // 🛍️ 상품 목록 조회
-  http.get('/products', () => {
-    return HttpResponse.json(products);
+  // 상품 목록 조회
+  http.get(new RegExp(`${URLS.PRODUCTS}/*`), ({ request }) => {
+    const url = new URL(request.url);
+    const page = Number(url.searchParams.get('page') ?? 0);
+    const size = Number(url.searchParams.get('size') ?? 50);
+
+    const paginated = {
+      ...products,
+      content: products.content.slice(page * size, (page + 1) * size)
+    };
+
+    return HttpResponse.json(paginated);
   }),
 
-  // 🛒 장바구니 목록 조회
+  // 장바구니 목록 조회
   http.get('/cart-items', () => {
     return HttpResponse.json(serverCartItems);
   }),
 
-  // ➕ 장바구니 아이템 추가
+  // 장바구니 아이템 추가
   http.post('/cart-items', async ({ request }) => {
     const { productId, quantity } = (await request.json()) as PostProductRequestBody;
 
@@ -57,7 +67,7 @@ export const handlers = [
     return new HttpResponse(null, { status: 201 });
   }),
 
-  // ❌ 장바구니 아이템 삭제
+  // 장바구니 아이템 삭제
   http.delete('/cart-items/:cartItemId', ({ params }) => {
     const idToDelete = Number(params.cartItemId);
 
