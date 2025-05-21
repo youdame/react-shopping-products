@@ -50,10 +50,10 @@ export default function ProductList({ cartItems, refetchCart }: ProductListProps
         if (product.isInCart) {
           await deleteCartItem(product.cartItemId!);
           await refetchCart();
-        } else {
-          await postCartItem(product.id, 1);
-          await refetchCart();
+          return;
         }
+        await postCartItem(product.id, 1);
+        await refetchCart();
       } catch (err) {
         if (err instanceof Error) showError(err);
       }

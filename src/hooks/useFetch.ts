@@ -6,7 +6,7 @@ interface UseFetchOptions<T> {
   deps?: DependencyList;
 }
 
-function useFetch<T>({ fetchFn, immediate = true, deps = [] }: UseFetchOptions<T>) {
+function useFetch<T>({ fetchFn, deps = [] }: UseFetchOptions<T>) {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -31,13 +31,12 @@ function useFetch<T>({ fetchFn, immediate = true, deps = [] }: UseFetchOptions<T
   }, deps);
 
   useEffect(() => {
-    if (immediate) {
-      fetcher();
-    }
+    fetcher();
+
     return () => {
       controllerRef.current?.abort();
     };
-  }, [fetcher, immediate]);
+  }, [fetcher]);
 
   return { data, isLoading, error, fetcher };
 }
