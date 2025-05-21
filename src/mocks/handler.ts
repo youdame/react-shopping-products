@@ -16,10 +16,20 @@ export const handlers = [
     const url = new URL(request.url);
     const page = Number(url.searchParams.get('page') ?? 0);
     const size = Number(url.searchParams.get('size') ?? 50);
+    const sort = url.searchParams.get('sort');
+
+    const result = [...products.content];
+
+    if (sort) {
+      const [, direction] = sort.split(',');
+      result.sort(() => {
+        return direction === 'asc' ? 1 : -1;
+      });
+    }
 
     const paginated = {
       ...products,
-      content: products.content.slice(page * size, (page + 1) * size)
+      content: result.slice(page * size, (page + 1) * size)
     };
 
     return HttpResponse.json(paginated);

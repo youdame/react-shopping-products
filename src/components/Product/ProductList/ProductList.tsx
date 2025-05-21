@@ -3,24 +3,19 @@ import Dropdown from '../../Dropdown/Dropdown';
 import Spinner from '../../Spinner/Spinner';
 import ProductCard from '../ProductCard/ProductCard';
 import { CATEGORY_OPTIONS, ORDER_BY_OPTIONS } from '../../../constants/categoryOption';
-import { CartItem } from '../../../types/cartContents';
 import { useCallback, useState } from 'react';
 import { CategoryOptionType, OrderByOptionType } from '../../../types/categoryOption';
 import { useErrorContext } from '../../../contexts/ErrorContext';
-import useFetch from '../../../hooks/useFetch';
-import { ProductResponse } from '../../../types/response';
+import { CartItemResponse, ProductResponse } from '../../../types/response';
 import getProducts from '../../../api/getProducts';
 import useErrorHandler from '../../../hooks/useErrorHandler';
 import { createProductListViewModel, ProductCardViewModel } from '../../../api/model/createProductListModel';
 import { deleteCartItem } from '../../../api/deleteCartItem';
 import postCartItem from '../../../api/postCartItem';
+import { useApiContext } from '../../../contexts/ApiContext';
+import getCartItems from '../../../api/getCartItems';
 
-interface ProductListProps {
-  cartItems?: CartItem[];
-  refetchCart: () => Promise<void>;
-}
-
-export default function ProductList({ cartItems, refetchCart }: ProductListProps) {
+export default function ProductList() {
   const [category, setCategory] = useState<CategoryOptionType>('전체');
   const [orderBy, setOrderBy] = useState<OrderByOptionType>('낮은 가격순');
   const { showError } = useErrorContext();
@@ -29,19 +24,25 @@ export default function ProductList({ cartItems, refetchCart }: ProductListProps
     data: products,
     isLoading: productFetchLoading,
     error: productFetchError
-  } = useFetch<ProductResponse>({
+  } = useApiContext<ProductResponse>({
     fetchFn: getProducts(orderBy),
+    key: `getProducts:${orderBy}`,
     deps: [orderBy]
   });
 
-  useErrorHandler(productFetchError);
+  const { data: cartItems, fetcher: refetchCart } = useApiContext<CartItemResponse>({
+    fetchFn: getCartItems,
+    key: 'getCartItems'
+  });
 
   const filteredProducts =
     category === '전체' ? products?.content : products?.content.filter((item) => item.category === category);
 
+  useErrorHandler(productFetchError);
+
   const productListViewModel = createProductListViewModel({
     products: filteredProducts,
-    cartItems
+    cartItems: cartItems?.content
   });
 
   const handleCartToggle = useCallback(
