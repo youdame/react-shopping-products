@@ -10,7 +10,7 @@ import {
   type PropsWithChildren
 } from 'react';
 
-const FetchContext = createContext<{
+const ApiContext = createContext<{
   data: Record<string, unknown>;
   setData: Dispatch<SetStateAction<Record<string, unknown>>>;
 }>({
@@ -21,7 +21,7 @@ const FetchContext = createContext<{
 export function ApiProvider({ children }: PropsWithChildren) {
   const [data, setData] = useState({});
 
-  return <FetchContext.Provider value={{ data, setData }}>{children}</FetchContext.Provider>;
+  return <ApiContext.Provider value={{ data, setData }}>{children}</ApiContext.Provider>;
 }
 
 export function useApiContext<T>({
@@ -33,7 +33,7 @@ export function useApiContext<T>({
   key: string;
   deps?: DependencyList;
 }) {
-  const { data, setData } = useContext(FetchContext);
+  const { data, setData } = useContext(ApiContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
