@@ -5,25 +5,28 @@ import { useApiContext } from '../../contexts/ApiContext';
 import { CartItemResponse } from '../../types/response';
 import getCartItems from '../../api/getCartItems';
 import Image from '../Image/Image';
+import useErrorHandler from '../../hooks/useErrorHandler';
 
-function Header({ cartLength }: { cartLength?: number | undefined }) {
+function Header() {
   const [isAlertOpen, setAlertOpen] = useState(false);
 
   const handleToggle = () => {
     setAlertOpen((prev) => !prev);
   };
 
-  const { data: cartItems } = useApiContext<CartItemResponse>({
+  const { data: cartItems, error: cartFetchError } = useApiContext<CartItemResponse>({
     fetchFn: getCartItems,
     key: 'getCartItems'
   });
+
+  useErrorHandler(cartFetchError);
 
   return (
     <header css={styles.header}>
       <p>SHOP</p>
       <button onClick={handleToggle} css={styles.cartIcon}>
         <img src="assets/cart.svg" alt="cart-icon" />
-        <span hidden={cartLength === 0}>{cartLength}</span>
+        <span hidden={cartItems?.content.length === 0}>{cartItems?.content.length}</span>
       </button>
 
       {isAlertOpen && (
