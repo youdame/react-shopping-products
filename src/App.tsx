@@ -1,6 +1,5 @@
 import * as styles from './App.style';
 import HomeHeader from './components/Header/HomeHeader';
-
 import ProductList from './components/Product/ProductList/ProductList';
 
 function App() {
