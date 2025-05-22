@@ -1,5 +1,5 @@
 import * as styles from './App.style';
-import Header from './components/Header/Header';
+import Header from './components/Header/HomeHeader';
 import ProductList from './components/Product/ProductList/ProductList';
 
 function App() {

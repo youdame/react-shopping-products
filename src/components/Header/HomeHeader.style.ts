@@ -1,19 +1,9 @@
 import { css } from '@emotion/react';
 
-export const header = css({
-  position: 'fixed',
-  top: '0%',
-  left: '50%',
-  transform: 'translate(-50%, 0)',
-  height: '64px',
-  width: '382px',
-  backgroundColor: 'black',
-  padding: '24px',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  zIndex: 100,
-  p: { color: 'white', fontWeight: 800, fontSize: '20px' }
+export const logoCss = css({
+  color: 'white',
+  fontWeight: 800,
+  fontSize: '20px'
 });
 
 export const cartIcon = css({

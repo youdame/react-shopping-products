@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
-import Header from '../components/Header/Header';
+import Header from '../components/Header/HomeHeader';
 import { CartItemResponse } from '../types/response';
 import { handlers } from '../mocks/handler';
 
