@@ -1,55 +1,107 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ProductList from '../components/Product/ProductList/ProductList';
+import { setupServer } from 'msw/node';
+import { handlers } from '../mocks/handler';
 import { ErrorContextProvider } from '../contexts/ErrorContext';
-import products from '../mocks/data/products.json';
-import { describe, it, beforeAll, afterAll, afterEach, vi, expect } from 'vitest';
+import { ApiProvider } from '../contexts/ApiContext';
 
-const server = setupServer(
-  http.get('/products', () => {
-    return HttpResponse.json(products);
-  }),
-  http.get('/cart-items', () => {
-    return HttpResponse.json({ content: [] });
-  })
-);
+const server = setupServer(...handlers);
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-describe.only('🧪 ProductList 컴포넌트 (http 기반)', () => {
-  const mockRefetchCart = vi.fn();
-
-  it('상품 목록이 성공적으로 렌더링된다', async () => {
+describe('ProductList 컴포넌트', () => {
+  it('상품 목록이 렌더링된다', async () => {
     render(
       <ErrorContextProvider>
-        <ProductList cartItems={[]} refetchCart={mockRefetchCart} />
+        <ApiProvider>
+          <ProductList />
+        </ApiProvider>
       </ErrorContextProvider>
     );
 
+    expect(screen.getByText('전체')).toBeInTheDocument();
+    expect(screen.getByText('낮은 가격순')).toBeInTheDocument();
+
     await waitFor(() => {
-      screen.getByRole('heading', { name: /^12$/ });
+      expect(screen.getByText('패셔니스타 유담이')).toBeInTheDocument();
     });
   });
+});
 
-  it('상품 API 요청이 실패하면 에러 메시지가 출력된다', async () => {
-    // 👉 http 버전의 핸들러로 실패 시나리오 대체
-    server.use(
-      http.get('/products', () => {
-        return new HttpResponse(null, { status: 500 });
-      })
-    );
+it('카테고리를 선택하면 해당 카테고리에 속한 상품만 렌더링된다', async () => {
+  render(
+    <ErrorContextProvider>
+      <ApiProvider>
+        <ProductList />
+      </ApiProvider>
+    </ErrorContextProvider>
+  );
 
+  await waitFor(() => {
+    expect(screen.getByText('패셔니스타 유담이')).toBeInTheDocument();
+  });
+
+  screen.getByText('식료품').click();
+
+  await waitFor(() => {
+    expect(screen.getByText('얌샘김밥')).toBeInTheDocument();
+  });
+
+  expect(screen.queryByText('패셔니스타 유담이')).not.toBeInTheDocument();
+});
+
+it('낮은 가격순으로 정렬하면 저가 상품이 먼저 나온다', async () => {
+  render(
+    <ErrorContextProvider>
+      <ApiProvider>
+        <ProductList />
+      </ApiProvider>
+    </ErrorContextProvider>
+  );
+
+  await waitFor(() => {
+    expect(screen.getByText('패셔니스타 유담이')).toBeInTheDocument();
+  });
+
+  const prices = screen
+    .getAllByText(/원$/)
+    .map((el) => parseInt(el.textContent?.replace(/,/g, '').replace('원', '') ?? '0'));
+  const sortedPrices = [...prices].sort((a, b) => a - b);
+
+  expect(prices).toEqual(sortedPrices);
+});
+
+describe('ProductList 장바구니 토글', () => {
+  it('상품 담기 → 빼기 → 다시 담기가 정상 동작한다', async () => {
     render(
       <ErrorContextProvider>
-        <ProductList cartItems={[]} refetchCart={mockRefetchCart} />
+        <ApiProvider>
+          <ProductList />
+        </ApiProvider>
       </ErrorContextProvider>
     );
 
+    const addButton = await screen.findByRole('button', { name: /담기/i });
+
+    fireEvent.click(addButton);
+
     await waitFor(() => {
-      expect(screen.getByText(/에러가 발생했습니다/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /빼기/i })).toBeInTheDocument();
+    });
+
+    const removeButton = screen.getByRole('button', { name: /빼기/i });
+    fireEvent.click(removeButton);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /담기/i })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /담기/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /빼기/i })).toBeInTheDocument();
     });
   });
 });

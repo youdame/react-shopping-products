@@ -6,3 +6,7 @@ export const bodyCss = css({
   flexDirection: 'column',
   alignItems: 'center'
 });
+
+export const headerHeight = css({
+  height: '80px'
+});
