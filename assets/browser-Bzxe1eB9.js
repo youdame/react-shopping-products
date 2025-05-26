@@ -27,7 +27,7 @@ var __privateMethod = (obj, member, method) => {
   return method;
 };
 var _executor, _decorate, decorate_fn, _a2;
-import { U as URLS } from "./index-YJqvlMDn.js";
+import { U as URLS } from "./index-C1smMu8D.js";
 var POSITIONALS_EXP$1 = /(%?)(%([sdijo]))/g;
 function serializePositional$1(positional, flag) {
   switch (flag) {
@@ -5688,7 +5688,7 @@ const handlers = [
     return new HttpResponse(null, { status: 201 });
   }),
   // 장바구니 개수 변경
-  http.patch("/cart-items/:cartItemId", async ({ params, request }) => {
+  http.patch(`${URLS.CART_ITEMS}:cartItemId`, async ({ params, request }) => {
     const idToPatch = Number(params.cartItemId);
     const { quantity } = await request.json();
     serverCartItems.content = serverCartItems.content.map((item) => {
@@ -5700,7 +5700,7 @@ const handlers = [
     return new HttpResponse(null, { status: 200 });
   }),
   // 장바구니 아이템 삭제
-  http.delete("/cart-items/:cartItemId", ({ params }) => {
+  http.delete(`${URLS.CART_ITEMS}:cartItemId`, ({ params }) => {
     const idToDelete = Number(params.cartItemId);
     serverCartItems.content = serverCartItems.content.filter((item) => item.id !== idToDelete);
     return new HttpResponse(null, { status: 204 });
