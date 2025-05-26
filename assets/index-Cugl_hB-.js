@@ -15613,6 +15613,11 @@ const handlers = [
   })
 ];
 const worker = setupWorker(...handlers);
+worker.start({
+  serviceWorker: {
+    url: "/react-shopping-products/mockServiceWorker.js"
+  }
+});
 {
   worker.start({
     onUnhandledRequest: "bypass"
