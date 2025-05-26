@@ -9244,7 +9244,7 @@ function CartModal({ isOpen, onClose, title, content, footer }) {
   return /* @__PURE__ */ jsxs(Modal, { isOpen, onClose, position: "bottom", size: "small", children: [
     /* @__PURE__ */ jsx$1(Modal.BackDrop, { css: backdropCss }),
     /* @__PURE__ */ jsxs(Modal.Content, { css: contentCss, children: [
-      Boolean(title) && /* @__PURE__ */ jsx$1(Modal.Title, { css: titleCss, children: title }),
+      Boolean(title) && /* @__PURE__ */ jsx$1(Modal.Title, { css: titleCss$1, children: title }),
       content,
       /* @__PURE__ */ jsx$1(Modal.Footer, { children: footer })
     ] })
@@ -9260,11 +9260,27 @@ const contentCss = css({
   borderRadius: "8px",
   gap: "12px"
 });
-const titleCss = css({
+const titleCss$1 = css({
   fontSize: "18px",
   fontWeight: "700",
   color: "#000"
 });
+const deleteCartItem = async (cartItemId) => {
+  if (cartItemId === void 0) {
+    throw new Error("cartItemId가 정의되지 않았습니다.");
+  }
+  const res = await fetch(`${URLS.CART_ITEMS}/${cartItemId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Basic ${btoa(`${"youdame"}:${"password"}`)}`,
+      "Content-Type": "application/json"
+    }
+  });
+  if (!res.ok) {
+    throw new Error("장바구니에서 상품을 삭제하는 데 실패했습니다.");
+  }
+  return res;
+};
 const createCartItemsViewModel = (cartItems) => {
   return cartItems == null ? void 0 : cartItems.map((item) => ({
     id: item.id,
@@ -9416,6 +9432,12 @@ const cartTextBlock = css({
   gap: "4px",
   fontSize: "14px"
 });
+const titleCss = css({
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  width: "140px"
+});
 function CartList({
   cartItems,
   onClick
@@ -9423,6 +9445,9 @@ function CartList({
   const { fetcher: refetchCart } = useApiContext({ fetchFn: getCartItems, key: "getCartItems" });
   const viewModel = createCartItemsViewModel(cartItems);
   const handleMinus = async (item) => {
+    if (item.cartQuantity - 1 <= 0) {
+      await deleteCartItem(item.id);
+    }
     await patchCartItem(item.id, item.cartQuantity - 1);
     await refetchCart();
   };
@@ -9436,7 +9461,7 @@ function CartList({
     /* @__PURE__ */ jsxs("div", { css: cartItem, children: [
       /* @__PURE__ */ jsx$1("div", { css: cartImageWrapper, children: /* @__PURE__ */ jsx$1(Image, { src: item.imageUrl, alt: `${item.title} 상품 이미지` }) }),
       /* @__PURE__ */ jsxs("div", { css: cartTextBlock, children: [
-        /* @__PURE__ */ jsx$1("h3", { children: item.title }),
+        /* @__PURE__ */ jsx$1("h3", { css: titleCss, children: item.title }),
         /* @__PURE__ */ jsx$1("p", { children: item.price }),
         /* @__PURE__ */ jsx$1(
           Counter,
@@ -9451,22 +9476,6 @@ function CartList({
     /* @__PURE__ */ jsx$1(RemoveFromCartButton, { onClick: () => onClick(item) })
   ] }, item.id)) });
 }
-const deleteCartItem = async (cartItemId) => {
-  if (cartItemId === void 0) {
-    throw new Error("cartItemId가 정의되지 않았습니다.");
-  }
-  const res = await fetch(`${URLS.CART_ITEMS}/${cartItemId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Basic ${btoa(`${"youdame"}:${"password"}`)}`,
-      "Content-Type": "application/json"
-    }
-  });
-  if (!res.ok) {
-    throw new Error("장바구니에서 상품을 삭제하는 데 실패했습니다.");
-  }
-  return res;
-};
 function Button({ children, variant = "primary", ...props }) {
   const styleMap = {
     primary: primaryStyle,
@@ -9806,6 +9815,9 @@ function ProductCard({
 }) {
   const { fetcher: refetchCart } = useApiContext({ fetchFn: getCartItems, key: "getCartItems" });
   const handleMinus = async () => {
+    if (cartQuantity - 1 <= 0) {
+      await deleteCartItem(cartItemId);
+    }
     await patchCartItem(cartItemId, cartQuantity - 1);
     await refetchCart();
   };
@@ -9955,7 +9967,7 @@ function App() {
   ] });
 }
 async function enableMocking() {
-  const { worker } = await __vitePreload(() => import("./browser-CSv2SGKD.js"), true ? [] : void 0);
+  const { worker } = await __vitePreload(() => import("./browser-CZTehqw9.js"), true ? [] : void 0);
   const isLocalhost = location.hostname === "localhost";
   await worker.start({
     serviceWorker: {
