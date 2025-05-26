@@ -27,7 +27,7 @@ var __privateMethod = (obj, member, method) => {
   return method;
 };
 var _executor, _decorate, decorate_fn, _a2;
-import { U as URLS } from "./index-C1smMu8D.js";
+import { U as URLS } from "./index-DV4k7i_Z.js";
 var POSITIONALS_EXP$1 = /(%?)(%([sdijo]))/g;
 function serializePositional$1(positional, flag) {
   switch (flag) {
@@ -5408,20 +5408,9 @@ const products = {
 const content = [
   {
     id: 1551,
-    quantity: 1,
+    quantity: 3,
     product: {
       id: 36,
-      name: "패셔니스타 유담이",
-      price: 3e8,
-      imageUrl: "https://image.yes24.com/goods/84933797/XL",
-      category: "패션잡화"
-    }
-  },
-  {
-    id: 1553,
-    quantity: 1,
-    product: {
-      id: 35,
       name: "패셔니스타 유담이",
       price: 3e8,
       imageUrl: "https://image.yes24.com/goods/84933797/XL",
@@ -5436,17 +5425,6 @@ const content = [
       name: "리바이 아커만",
       price: 6e7,
       imageUrl: "https://image.zeta-ai.io/profile-image/793bf4d3-03de-4ac3-afe1-95be8a9bc62c/29cd5c72-f872-4dba-8be1-21ba51e4487f.jpeg?w=1080&q=90&f=webp",
-      category: "패션잡화"
-    }
-  },
-  {
-    id: 1557,
-    quantity: 1,
-    product: {
-      id: 37,
-      name: "패셔니스타 유담이",
-      price: 3e6,
-      imageUrl: "https://image.yes24.com/goods/84933797/XL",
       category: "패션잡화"
     }
   },
@@ -5572,17 +5550,6 @@ const content = [
     }
   },
   {
-    id: 3837,
-    quantity: 1,
-    product: {
-      id: 66,
-      name: "9",
-      price: 9,
-      imageUrl: "9",
-      category: "9"
-    }
-  },
-  {
     id: 4061,
     quantity: 1,
     product: {
@@ -5688,7 +5655,7 @@ const handlers = [
     return new HttpResponse(null, { status: 201 });
   }),
   // 장바구니 개수 변경
-  http.patch(`${URLS.CART_ITEMS}:cartItemId`, async ({ params, request }) => {
+  http.patch(`${URLS.CART_ITEMS}/:cartItemId`, async ({ params, request }) => {
     const idToPatch = Number(params.cartItemId);
     const { quantity } = await request.json();
     serverCartItems.content = serverCartItems.content.map((item) => {
@@ -5700,7 +5667,7 @@ const handlers = [
     return new HttpResponse(null, { status: 200 });
   }),
   // 장바구니 아이템 삭제
-  http.delete(`${URLS.CART_ITEMS}:cartItemId`, ({ params }) => {
+  http.delete(`${URLS.CART_ITEMS}/:cartItemId`, ({ params }) => {
     const idToDelete = Number(params.cartItemId);
     serverCartItems.content = serverCartItems.content.filter((item) => item.id !== idToDelete);
     return new HttpResponse(null, { status: 204 });

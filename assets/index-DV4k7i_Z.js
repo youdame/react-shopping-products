@@ -9955,7 +9955,7 @@ function App() {
   ] });
 }
 async function enableMocking() {
-  const { worker } = await __vitePreload(() => import("./browser-Bzxe1eB9.js"), true ? [] : void 0);
+  const { worker } = await __vitePreload(() => import("./browser-CSv2SGKD.js"), true ? [] : void 0);
   const isLocalhost = location.hostname === "localhost";
   await worker.start({
     serviceWorker: {
