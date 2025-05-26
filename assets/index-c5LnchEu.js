@@ -9265,22 +9265,6 @@ const titleCss$1 = css({
   fontWeight: "700",
   color: "#000"
 });
-const deleteCartItem = async (cartItemId) => {
-  if (cartItemId === void 0) {
-    throw new Error("cartItemId가 정의되지 않았습니다.");
-  }
-  const res = await fetch(`${URLS.CART_ITEMS}/${cartItemId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Basic ${btoa(`${"youdame"}:${"password"}`)}`,
-      "Content-Type": "application/json"
-    }
-  });
-  if (!res.ok) {
-    throw new Error("장바구니에서 상품을 삭제하는 데 실패했습니다.");
-  }
-  return res;
-};
 const createCartItemsViewModel = (cartItems) => {
   return cartItems == null ? void 0 : cartItems.map((item) => ({
     id: item.id,
@@ -9444,16 +9428,15 @@ function CartList({
 }) {
   const { fetcher: refetchCart } = useApiContext({ fetchFn: getCartItems, key: "getCartItems" });
   const viewModel = createCartItemsViewModel(cartItems);
+  const { showError } = useErrorContext();
   const handleMinus = async (item) => {
-    if (item.cartQuantity - 1 <= 0) {
-      await deleteCartItem(item.id);
-    }
     await patchCartItem(item.id, item.cartQuantity - 1);
     await refetchCart();
   };
   const handlePlus = async (item) => {
-    if (item.cartQuantity >= item.productQuantity)
-      return;
+    if (item.cartQuantity >= item.productQuantity) {
+      showError(new Error("수량을 초과해서 담을 수 없어요."));
+    }
     await patchCartItem(item.id, item.cartQuantity + 1);
     await refetchCart();
   };
@@ -9476,6 +9459,22 @@ function CartList({
     /* @__PURE__ */ jsx$1(RemoveFromCartButton, { onClick: () => onClick(item) })
   ] }, item.id)) });
 }
+const deleteCartItem = async (cartItemId) => {
+  if (cartItemId === void 0) {
+    throw new Error("cartItemId가 정의되지 않았습니다.");
+  }
+  const res = await fetch(`${URLS.CART_ITEMS}/${cartItemId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Basic ${btoa(`${"youdame"}:${"password"}`)}`,
+      "Content-Type": "application/json"
+    }
+  });
+  if (!res.ok) {
+    throw new Error("장바구니에서 상품을 삭제하는 데 실패했습니다.");
+  }
+  return res;
+};
 function Button({ children, variant = "primary", ...props }) {
   const styleMap = {
     primary: primaryStyle,
@@ -9815,9 +9814,6 @@ function ProductCard({
 }) {
   const { fetcher: refetchCart } = useApiContext({ fetchFn: getCartItems, key: "getCartItems" });
   const handleMinus = async () => {
-    if (cartQuantity - 1 <= 0) {
-      await deleteCartItem(cartItemId);
-    }
     await patchCartItem(cartItemId, cartQuantity - 1);
     await refetchCart();
   };
@@ -9967,7 +9963,7 @@ function App() {
   ] });
 }
 async function enableMocking() {
-  const { worker } = await __vitePreload(() => import("./browser-CZTehqw9.js"), true ? [] : void 0);
+  const { worker } = await __vitePreload(() => import("./browser-CAj5_-cB.js"), true ? [] : void 0);
   const isLocalhost = location.hostname === "localhost";
   await worker.start({
     serviceWorker: {

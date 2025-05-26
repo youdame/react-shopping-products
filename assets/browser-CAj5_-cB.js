@@ -27,7 +27,7 @@ var __privateMethod = (obj, member, method) => {
   return method;
 };
 var _executor, _decorate, decorate_fn, _a2;
-import { U as URLS } from "./index-ue6-6rAd.js";
+import { U as URLS } from "./index-c5LnchEu.js";
 var POSITIONALS_EXP$1 = /(%?)(%([sdijo]))/g;
 function serializePositional$1(positional, flag) {
   switch (flag) {
@@ -5658,12 +5658,13 @@ const handlers = [
   http.patch(`${URLS.CART_ITEMS}/:cartItemId`, async ({ params, request }) => {
     const idToPatch = Number(params.cartItemId);
     const { quantity } = await request.json();
-    serverCartItems.content = serverCartItems.content.map((item) => {
-      if (item.id == idToPatch) {
-        return { ...item, quantity };
-      }
-      return item;
-    });
+    if (quantity === 0) {
+      serverCartItems.content = serverCartItems.content.filter((item) => item.id !== idToPatch);
+    } else {
+      serverCartItems.content = serverCartItems.content.map(
+        (item) => item.id === idToPatch ? { ...item, quantity } : item
+      );
+    }
     return new HttpResponse(null, { status: 200 });
   }),
   // 장바구니 아이템 삭제
