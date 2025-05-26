@@ -27,7 +27,7 @@ var __privateMethod = (obj, member, method) => {
   return method;
 };
 var _executor, _decorate, decorate_fn, _a2;
-import { U as URLS } from "./index-CtoC_3pn.js";
+import { U as URLS } from "./index-YJqvlMDn.js";
 var POSITIONALS_EXP$1 = /(%?)(%([sdijo]))/g;
 function serializePositional$1(positional, flag) {
   switch (flag) {
@@ -5654,11 +5654,11 @@ const handlers = [
     return HttpResponse.json(paginated);
   }),
   // 장바구니 목록 조회
-  http.get("/cart-items", () => {
+  http.get(URLS.CART_ITEMS, () => {
     return HttpResponse.json(serverCartItems);
   }),
   // 장바구니 아이템 추가
-  http.post("/cart-items", async ({ request }) => {
+  http.post(URLS.CART_ITEMS, async ({ request }) => {
     const { productId, quantity } = await request.json();
     if (quantity > 5) {
       return HttpResponse.json(
