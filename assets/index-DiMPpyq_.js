@@ -9001,7 +9001,7 @@ function useApiContext({
     fetcher: request
   };
 }
-const BASE_URL = "http://techcourse-lv2-alb-974870821.ap-northeast-2.elb.amazonaws.com";
+const BASE_URL = "https://techcourse-lv2-alb-974870821.ap-northeast-2.elb.amazonaws.com";
 const URLS = {
   CART_ITEMS: `${BASE_URL}/cart-items`,
   PRODUCTS: `${BASE_URL}/products`
@@ -9955,7 +9955,7 @@ function App() {
   ] });
 }
 async function enableMocking() {
-  const { worker } = await __vitePreload(() => import("./browser-C__hbHyA.js"), true ? [] : void 0);
+  const { worker } = await __vitePreload(() => import("./browser-Ds5didjI.js"), true ? [] : void 0);
   const isLocalhost = location.hostname === "localhost";
   await worker.start({
     serviceWorker: {
